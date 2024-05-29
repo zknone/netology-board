@@ -47,4 +47,4 @@ const Advertisements ={
 
 
 
-module.exports = Advertisements;
+module.exports = Advertisements

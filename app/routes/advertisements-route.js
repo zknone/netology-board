@@ -4,11 +4,11 @@ const Advertisement = require('../modules/advertisments')
 
 router.get('/:id', (req, res) => {
     res.send('Advertisements route by id');
-  });
+  })
 
 router.get('/', (req, res) => {
   res.send('Advertisements route');
-});
+})
 
 router.post('/', async (req, res) => {
   try{
@@ -31,4 +31,4 @@ router.delete('/:id', async (req, res) => {
   
 })
 
-module.exports = router;
+module.exports = router
