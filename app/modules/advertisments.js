@@ -3,11 +3,19 @@ const AdModel = require('../models/admodel')
 
 const Advertisements ={
     async find(params) {
+        const {shortText, description, userId, tags} = params
         try {
-
-        }
-        catch{
-
+            const foundAds = await AdModel.find({
+                shortText, 
+                description, 
+                userId, 
+                tags,
+                isDeleted: false
+            })
+            return foundAds;
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
         }
     },
 
