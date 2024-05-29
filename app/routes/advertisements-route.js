@@ -14,6 +14,16 @@ router.get('/:id', async (req, res) => {
   res.send({ad: ad, id: id})
 })
 
+router.post('/:id', async (req, res) => {
+  const {id} = req.params
+  try {
+    const advertisementToDelete = await Advertisement.remove(id)
+    res.status(201).json(advertisementToDelete)
+  } catch(error) {
+    res.status(500).json({ error: 'Failed to delete advertisement' })
+  }
+})
+
 router.post('/', async (req, res) => {
   try{
     const data = req.body
@@ -24,15 +34,6 @@ router.post('/', async (req, res) => {
   }
 })
 
-router.delete('/:id', async (req, res) => {
-  const {id} = req.body
-  try {
-    const advertisementToDelete = await Advertisement.remove(id)
-    res.status(201).json(advertisementToDelete)
-  } catch(error) {
-    res.status(500).json({ error: 'Failed to delete advertisement' })
-  }
-  
-})
+
 
 module.exports = router
