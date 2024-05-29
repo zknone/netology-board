@@ -1,12 +1,16 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const path = require('path');
+const app = express();
 
-app.get('/', function (req, res) {
-  res.send('Hello World');
-})
+const advertisementsRoute = require('./routes/advertisements-route')
+const userRoute = require('./routes/user-route')
 
-app.get('/api', function (req, res) {
-    res.send('Connected to API');
-  })
+app.use(express.json())
+app.use('/static', express.static(path.join(__dirname, 'static')))
 
-app.listen(3000)
+app.use('/api/advertisements', advertisementsRoute)
+app.use('/api/signin', userRoute)
+
+app.listen(3000, () => {
+  console.log('Server is running on port 3000')
+});
