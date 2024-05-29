@@ -28,7 +28,8 @@ const AdSchema = new Schema({
         default: false,
     }
 }, {
-    timestamps: true
+    timestamps: true,
+    collection: 'ads'
 });
 
 module.exports = model('Ad', AdSchema);
