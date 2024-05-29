@@ -14,19 +14,19 @@ const Advertisements ={
             })
             return foundAds;
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error:', error)
             throw error;
         }
     },
 
     async create(data) {
         try {
-            const newAd = new AdModel(data);
-            await newAd.save();
-            return newAd;
+            const newAd = new AdModel(data)
+            await newAd.save()
+            return newAd
         }
         catch (error) {
-            console.error('Error:', error);
+            console.error('Error:', error)
             throw error;
         }
     },
@@ -39,8 +39,8 @@ const Advertisements ={
             });
         }
         catch (error){
-            console.error('Error:', error);
-            throw error;
+            console.error('Error:', error)
+            throw error
         }
     },    
 }

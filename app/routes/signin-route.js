@@ -1,10 +1,10 @@
-//POST /api/signin — залогиниться.
-
-const express = require('express');
+const express = require('express')
+const UserModel = require('../models/usermodel')
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    res.send('User login')
+router.get('/', async (req, res) => {
+    const users = await UserModel.find().select('-__v');
+    res.send(users);
 })
 
 module.exports = router;

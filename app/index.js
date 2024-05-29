@@ -22,11 +22,6 @@ app.use('/api/signup', signupRoute)
 async function start(PORT, urlDb) {
   try {
     await mongoose.connect(urlDb, { dbName: 'ads' });
-
-
-    const users = await UserModel.find().select('-__v');
-    console.log(users);
-
     app.listen(PORT, async () => {
       console.log('Server is running on port', PORT)
     })
