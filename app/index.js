@@ -8,9 +8,12 @@ const userRoute = require('./routes/user-route')
 app.use(express.json())
 app.use('/static', express.static(path.join(__dirname, 'static')))
 
+const PORT = process.env.PORT || 3000
+const UrlDB = process.env.URL_DB
+
 app.use('/api/advertisements', advertisementsRoute)
 app.use('/api/signin', userRoute)
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000')
+app.listen(PORT, () => {
+  console.log('Server is running on port', PORT)
 });

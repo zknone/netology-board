@@ -3,16 +3,13 @@ services:
     image: node:20.10
     working_dir: /app
     volumes:
-      - ./:/app/
+      - .:/app
     environment:
       - PORT=3002
-      - COUNTER_PORT=3003
       - URL_DB=mongodb://root:example@mongo:27017/
     ports:
       - 80:3002
     command: npm run dev
-    depends_on:
-      - counter
   mongo:
     image: mongo
     restart: always
