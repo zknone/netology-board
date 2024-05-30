@@ -36,17 +36,6 @@ app.use('/api/advertisements', advertisementsRoute)
 app.use('/api/signin', signinRoute)
 app.use('/api/signup', signupRoute)
 
-app.get('/api/check-auth', isAuthenticated, (req, res) => {
-  res.status(200).json({ message: 'User is authenticated' })
-})
-
-function isAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next()
-  }
-  res.status(401).json({ message: 'Unauthorized' })
-}
-
 async function start(PORT, urlDb) {
   try {
     await mongoose.connect(urlDb, { dbName: 'ads' })
