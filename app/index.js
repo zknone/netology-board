@@ -12,8 +12,8 @@ const advertisementsRoute = require('./routes/advertisements-route')
 const signinRoute = require('./routes/signin-route')
 const signupRoute = require('./routes/signup-route')
 
-const app = express();
-const server = http.createServer(app);
+const app = express()
+const server = http.createServer(app)
 
 app.use(express.json())
 app.use('/static', express.static(path.join(__dirname, 'static')))
@@ -21,7 +21,7 @@ app.use('/static', express.static(path.join(__dirname, 'static')))
 const options = {
   usernameField: 'username',
   passwordField: 'password',
-};
+}
 
 app.use(express.urlencoded({ extended: true }))
 app.use(session({ secret: 'SECRET', resave: false, saveUninitialized: false }))
@@ -37,11 +37,11 @@ app.use('/api/signup', signupRoute)
 
 app.get('/api/check-auth', isAuthenticated, (req, res) => {
   res.status(200).json({ message: 'User is authenticated' })
-});
+})
 
 function isAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
-    return next();
+    return next()
   }
   res.status(401).json({ message: 'Unauthorized' })
 }
@@ -53,31 +53,31 @@ async function start(PORT, urlDb) {
     const verify = async (username, password, done) => {
       const user = await UserModel.findOne({ username: username }).select('-__v')
       if (!user) {
-          return done(null, false, {message: 'Incorrect email'});
+          return done(null, false, {message: 'Incorrect email'})
       }
 
-      const isMatch = await bcrypt.compare(password, user.password);
+      const isMatch = await bcrypt.compare(password, user.password)
       
       if (!isMatch) {
-        return done(null, false, { message: 'Неверный пароль' });
+        return done(null, false, { message: 'Неверный пароль' })
       }
 
-      return done(null, user);
-    };
+      return done(null, user)
+    }
 
     passport.serializeUser((user, cb) => {
-        cb(null, user.id);
-    });
+        cb(null, user.id)
+    })
 
     passport.deserializeUser(async (id, cb) => {
-        const user = await UserModel.findById(id).select('-__v');
+        const user = await UserModel.findById(id).select('-__v')
         if (!user) {
-            return cb(new Error('User not found'));
+            return cb(new Error('User not found'))
         }
-        cb(null, user);
-    });
+        cb(null, user)
+    })
 
-    passport.use(new LocalStrategy(options, verify));
+    passport.use(new LocalStrategy(options, verify))
 
     server.listen(PORT, async () => {
       console.log('Server is running on port', PORT)
@@ -87,5 +87,4 @@ async function start(PORT, urlDb) {
   }
 }
 
-
-start(PORT, UrlDB);
+start(PORT, UrlDB)
