@@ -7,6 +7,7 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const bcrypt = require('bcryptjs')
 const UserModel = require('./models/usermodel')
+const UserModule = require('./modules/users')
 
 const advertisementsRoute = require('./routes/advertisements-route')
 const signinRoute = require('./routes/signin-route')
@@ -19,7 +20,7 @@ app.use(express.json())
 app.use('/static', express.static(path.join(__dirname, 'static')))
 
 const options = {
-  usernameField: 'username',
+  usernameField: 'email',
   passwordField: 'password',
 }
 
@@ -50,16 +51,17 @@ async function start(PORT, urlDb) {
   try {
     await mongoose.connect(urlDb, { dbName: 'ads' })
 
-    const verify = async (username, password, done) => {
-      const user = await UserModel.findOne({ username: username }).select('-__v')
+    const verify = async (email, password, done) => {
+      const user = await UserModule.findByEmail(email)
+
       if (!user) {
           return done(null, false, {message: 'Incorrect email'})
       }
 
-      const isMatch = await bcrypt.compare(password, user.password)
+      const isMatch = await bcrypt.compare(password, user.passwordHash)
       
       if (!isMatch) {
-        return done(null, false, { message: 'Неверный пароль' })
+        return done(null, false, { message: 'wrong password' })
       }
 
       return done(null, user)

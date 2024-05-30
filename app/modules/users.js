@@ -15,9 +15,7 @@ const UserModule ={
 
     async findByEmail(email) {
         try {
-            const foundUser = await User.find({
-                email
-            })
+            const foundUser = await User.findOne({ email: email }).select('-__v')
             return foundUser;
         } catch (error) {
             console.error('Error:', error)
