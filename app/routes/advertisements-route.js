@@ -1,39 +1,37 @@
 const express = require('express');
 const router = express.Router();
-const Advertisement = require('../modules/advertisments')
+const Advertisement = require('../modules/advertisments');
 const AdModel = require('../models/admodel');
 
 router.get('/', async (req, res) => {
-  const ads = await AdModel.find().select('-__v')
-  res.send(ads)
-})
+  const ads = await AdModel.find().select('-__v');
+  res.send(ads);
+});
 
 router.get('/:id', async (req, res) => {
-  const {id} = req.params
-  const ad = await AdModel.findById(id)
-  res.send({ad: ad, id: id})
-})
+  const { id } = req.params;
+  const ad = await AdModel.findById(id);
+  res.send({ ad: ad, id: id });
+});
 
 router.post('/:id', async (req, res) => {
-  const {id} = req.params
+  const { id } = req.params;
   try {
-    const advertisementToDelete = await Advertisement.remove(id)
-    res.status(201).json(advertisementToDelete)
-  } catch(error) {
-    res.status(500).json({ error: 'Failed to delete advertisement' })
+    const advertisementToDelete = await Advertisement.remove(id);
+    res.status(201).json(advertisementToDelete);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete advertisement' });
   }
-})
+});
 
 router.post('/', async (req, res) => {
-  try{
-    const data = req.body
-    const advertisement = await Advertisement.create(data)
-    res.status(201).json(advertisement)
+  try {
+    const data = req.body;
+    const advertisement = await Advertisement.create(data);
+    res.status(201).json(advertisement);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create advertisement' })
+    res.status(500).json({ error: 'Failed to create advertisement' });
   }
-})
+});
 
-
-
-module.exports = router
+module.exports = router;

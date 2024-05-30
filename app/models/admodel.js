@@ -1,35 +1,38 @@
 const { Schema, model, Types } = require('mongoose');
 
-const AdSchema = new Schema({
+const AdSchema = new Schema(
+  {
     shortText: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     description: {
-        type: String,
-        required: false,
+      type: String,
+      required: false,
     },
     images: {
-        type: String,
-        required: false,
+      type: String,
+      required: false,
     },
     userId: {
-        type: Types.ObjectId,
-        required: true,
-        ref: 'User'
+      type: Types.ObjectId,
+      required: true,
+      ref: 'User',
     },
     tags: {
-        type: [String],
-        required: false,
+      type: [String],
+      required: false,
     },
     isDeleted: {
-        type: Boolean,
-        required: true,
-        default: false,
-    }
-}, {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+  },
+  {
     timestamps: true,
-    collection: 'ads'
-});
+    collection: 'ads',
+  },
+);
 
 module.exports = model('Ad', AdSchema);
