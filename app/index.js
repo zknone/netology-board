@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 const advertisementsRoute = require('./routes/advertisements-route')
 const signinRoute = require('./routes/signin-route')
 const signupRoute = require('./routes/signup-route');
-const UserModel = require('./models/usermodel');
 
 app.use(express.json())
 app.use('/static', express.static(path.join(__dirname, 'static')))

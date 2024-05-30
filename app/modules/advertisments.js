@@ -1,4 +1,3 @@
-const express = require('express');
 const AdModel = require('../models/admodel')
 
 const Advertisements ={
