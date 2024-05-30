@@ -3,18 +3,25 @@ const router = express.Router();
 const Advertisement = require('../modules/advertisments');
 const AdModel = require('../models/admodel');
 
+function isAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.status(401).json({ message: 'Unauthorized' });
+}
+
 router.get('/', async (req, res) => {
   const ads = await AdModel.find().select('-__v');
-  res.send(ads);
+  res.send({ data: ads, status: 'ok' });
 });
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   const ad = await AdModel.findById(id);
-  res.send({ ad: ad, id: id });
+  res.send({ data: ad, status: 'ok' });
 });
 
-router.post('/:id', async (req, res) => {
+router.post('/:id', isAuthenticated, async (req, res) => {
   const { id } = req.params;
   try {
     const advertisementToDelete = await Advertisement.remove(id);
@@ -24,7 +31,7 @@ router.post('/:id', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', isAuthenticated, async (req, res) => {
   try {
     const data = req.body;
     const advertisement = await Advertisement.create(data);
