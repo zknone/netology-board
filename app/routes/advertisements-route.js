@@ -13,9 +13,7 @@ function isAuthenticated(req, res, next) {
 router.get('/', async (req, res) => {
   const ads = await AdModel.find().select('-__v');
 
-  const nonDeletedAds = ads.filter((el) => el.isDeleted !== true);
-
-  res.send({ data: nonDeletedAds, status: 'ok' });
+  res.send({ data: ads, status: 'ok' });
 });
 
 router.get('/:id', async (req, res) => {

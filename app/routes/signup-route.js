@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
     });
   } catch (error) {
     return res.status(500).send({
-      error: 'email занят',
+      error: 'Email is already used',
       status: 'error',
     });
   }
