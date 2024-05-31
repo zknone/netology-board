@@ -3,8 +3,7 @@ const router = express.Router();
 const Advertisement = require('../modules/advertisments');
 const AdModel = require('../models/admodel');
 const UserModel = require('../models/usermodel');
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+const upload = require('../middleware/upload');
 
 function isAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
@@ -24,6 +23,7 @@ router.get('/', async (req, res) => {
           id: el._id,
           shortTitle: el.shortText,
           description: el.description,
+          tags: el.tags,
           images: el.images,
           user: {
             id: el.userId,
@@ -56,6 +56,7 @@ router.get('/:id', async (req, res) => {
         shortTitle: ad.shortText,
         description: ad.description,
         images: ad.images,
+        tags: ad.tags,
         user: {
           id: user._id,
           name: user.name,
@@ -98,6 +99,7 @@ router.post(
       const { shortText, description, tags, isDeleted } = req.body;
       const images = req.files.map((file) => file.path);
       const userId = req.user._id;
+      const user = await UserModel.findById(userId);
       const data = {
         shortText,
         description,
@@ -106,8 +108,22 @@ router.post(
         isDeleted,
         images,
       };
-      const advertisement = await Advertisement.create(data);
-      res.status(201).json(advertisement);
+      await Advertisement.create(data);
+      res.send({
+        data: {
+          id: data._id,
+          shortTitle: data.shortText,
+          description: data.description,
+          tags: data.tags,
+          images: data.images,
+          user: {
+            id: userId,
+            name: user.name,
+          },
+          createdAt: data.createdAt,
+        },
+        status: 'ok',
+      });
     } catch (error) {
       res.status(500).json({ error: 'Failed to create advertisement' });
     }
