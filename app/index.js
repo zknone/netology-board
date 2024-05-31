@@ -73,7 +73,9 @@ async function start(PORT, urlDb) {
     server.listen(PORT, async () => {
       console.log('Server is running on port', PORT);
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log('error', error);
+  }
 }
 
 start(PORT, UrlDB);
