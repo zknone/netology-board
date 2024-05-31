@@ -1,16 +1,25 @@
 const AdModel = require('../models/admodel');
 
 const Advertisements = {
-  async find(params) {
+  async find(params = {}) {
     const { shortText, description, userId, tags } = params;
     try {
-      const foundAds = await AdModel.find({
-        shortText,
-        description,
-        userId,
-        tags,
-        isDeleted: false,
-      });
+      const query = { isDeleted: false };
+
+      if (shortText) {
+        query.shortText = shortText;
+      }
+      if (description) {
+        query.description = description;
+      }
+      if (userId) {
+        query.userId = userId;
+      }
+      if (tags) {
+        query.tags = tags;
+      }
+
+      const foundAds = await AdModel.find(query);
       return foundAds;
     } catch (error) {
       console.error('Error:', error);
@@ -31,9 +40,7 @@ const Advertisements = {
 
   async remove(id) {
     try {
-      await AdModel.findByIdAndUpdate(id, {
-        isDeleted: true,
-      });
+      await AdModel.findByIdAndUpdate(id, { isDeleted: true });
     } catch (error) {
       console.error('Error:', error);
       throw error;
