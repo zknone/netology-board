@@ -5,12 +5,30 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./app/index.js"
+    "server": "node app/index.js",
+    "start": "node app/index.js",
+    "dev": "nodemon -L app/index.js",
+    "lint": "eslint .",
+    "format": "prettier --write ."
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "express": "^4.19.2",
-    "nodemon": "^3.1.1"
+    "express-session": "^1.18.0",
+    "mongoose": "^8.4.0",
+    "multer": "^1.4.5-lts.1",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "globals": "^15.3.0",
+    "nodemon": "^3.1.2"
   }
 }
