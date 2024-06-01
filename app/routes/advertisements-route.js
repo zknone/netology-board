@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Advertisement = require('../modules/advertisments');
-const AdModel = require('../models/admodel');
-const UserModel = require('../models/usermodel');
+const AdModel = require('../models/ad-model');
+const UserModel = require('../models/user-model');
 const upload = require('../middleware/upload');
 
 function isAuthenticated(req, res, next) {

@@ -1,15 +1,16 @@
 const express = require('express');
 const http = require('http');
-const path = require('path');
+const socketIo = require('socket.io');
 const mongoose = require('mongoose');
+const path = require('path');
 const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
-const UserModel = require('./models/usermodel');
+const UserModel = require('./models/user-model');
 const UserModule = require('./modules/users');
 
-const socketIo = require('socket.io');
+const Chat = require('./modules/chat');
 
 const advertisementsRoute = require('./routes/advertisements-route');
 const signinRoute = require('./routes/signin-route');
@@ -17,7 +18,11 @@ const signupRoute = require('./routes/signup-route');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = socketIo(server, {
+  cors: {
+    origin: '*',
+  },
+});
 
 app.use(express.json());
 app.use('/static', express.static(path.join(__dirname, 'static')));
@@ -41,7 +46,16 @@ app.use('/api/signup', signupRoute);
 
 async function start(PORT, urlDb) {
   try {
-    await mongoose.connect(urlDb, { dbName: 'ads' });
+    await mongoose
+      .connect(UrlDB, {
+        dbName: 'ads',
+      })
+      .then(() => {
+        console.log('Connected to MongoDB');
+      })
+      .catch((err) => {
+        console.error('Error connecting to MongoDB', err);
+      });
 
     const verify = async (email, password, done) => {
       const user = await UserModule.findByEmail(email);
@@ -73,7 +87,7 @@ async function start(PORT, urlDb) {
 
     passport.use(new LocalStrategy(options, verify));
 
-    server.listen(PORT, async () => {
+    server.listen(PORT, () => {
       console.log('Server is running on port', PORT);
     });
   } catch (error) {
@@ -84,20 +98,17 @@ async function start(PORT, urlDb) {
 start(PORT, UrlDB);
 
 io.on('connection', (socket) => {
-  const { id } = socket;
-  const { receiverId, senderId } = socket.handshake.query;
+  console.log('New connection:', socket.id);
+  const { roomId } = socket.handshake.query;
+  console.log('room ID:', roomId);
 
-  socket.join(receiverId);
+  socket.join(roomId);
 
-  console.log(receiverId);
-  console.log(senderId);
-
-  socket.on('private-message', (msg) => {
-    msg.type = `private: ${receiverId}`;
-    socket.emit('private-message', msg);
+  socket.on('private-message', async (message) => {
+    await Chat.sendMessage(socket, message);
   });
 
   socket.on('disconnect', () => {
-    console.log('we are disconnected with', id);
+    console.log('Disconnected:', socket.id);
   });
 });

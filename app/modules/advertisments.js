@@ -1,4 +1,4 @@
-const AdModel = require('../models/admodel');
+const AdModel = require('../models/ad-model');
 
 const Advertisements = {
   async find(params = {}) {
