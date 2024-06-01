@@ -47,7 +47,7 @@ app.use('/api/signup', signupRoute);
 async function start(PORT, urlDb) {
   try {
     await mongoose
-      .connect(UrlDB, {
+      .connect(urlDb, {
         dbName: 'ads',
       })
       .then(() => {
@@ -89,6 +89,11 @@ async function start(PORT, urlDb) {
 
     server.listen(PORT, () => {
       console.log('Server is running on port', PORT);
+    });
+
+    Chat.subscribe((data) => {
+      console.log('New message in chat:', data.chatId);
+      console.log('Message details:', data.message);
     });
   } catch (error) {
     console.log('error', error);

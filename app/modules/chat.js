@@ -1,10 +1,17 @@
 const ChatModel = require('../models/chat-model');
+const EventEmitter = require('events');
+
+const chatEvents = new EventEmitter();
 
 const Chat = {
   async find([senderId, receiverId]) {
     return await ChatModel.findOne({
       users: { $all: [senderId, receiverId] },
     });
+  },
+
+  async getHistory(id) {
+    return await ChatModel.findById(id);
   },
 
   async sendMessage(socket, msg) {
@@ -30,9 +37,18 @@ const Chat = {
       }
 
       socket.to(msg.receiverId).emit('private-message', msg);
+
+      chatEvents.emit('newMessage', {
+        chatId: chat._id,
+        message: message,
+      });
     } catch (error) {
       console.error('Error:', error);
     }
+  },
+
+  subscribe(callback) {
+    chatEvents.on('newMessage', callback);
   },
 };
 
